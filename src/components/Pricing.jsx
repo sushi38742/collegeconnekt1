@@ -40,6 +40,15 @@ const studentFeatures = [
   'Priority support',
 ]
 
+const tutorFeatures = [
+  '30-minute call with our team',
+  'We learn your target score & timeline',
+  'Matched with 3 vetted SAT/ACT tutors',
+  'Side-by-side tutor comparison',
+  'Direct intro — no marketplace',
+  'One-time fee, no ongoing commitment',
+]
+
 const tutors = [
   {
     initials: 'MR',
@@ -76,21 +85,12 @@ const tutors = [
 function TutorModal({ onClose }) {
   const [step, setStep] = useState(1)
   const [selectedTest, setSelectedTest] = useState(null)
-  const [comparing, setComparing] = useState([])
 
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
   }, [onClose])
-
-  const toggleCompare = (name) => {
-    setComparing((prev) =>
-      prev.includes(name) ? prev.filter((n) => n !== name) : prev.length < 2 ? [...prev, name] : prev
-    )
-  }
-
-  const comparingTutors = tutors.filter((t) => comparing.includes(t.name))
 
   return (
     <div
@@ -106,22 +106,20 @@ function TutorModal({ onClose }) {
       />
 
       <motion.div
-        className="relative bg-white rounded-2xl w-full max-w-lg shadow-[0_24px_80px_rgba(0,0,0,0.18)] overflow-hidden"
+        className={`relative bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.18)] overflow-hidden w-full ${step === 2 ? 'max-w-3xl' : 'max-w-md'}`}
         initial={{ opacity: 0, scale: 0.96, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 12 }}
         transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        layout
       >
-        {/* Limited sale banner */}
+        {/* Sale banner */}
         <div className="bg-[#1a1a1a] px-5 py-2.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#4ade80] animate-pulse" />
             <span className="text-[11px] font-semibold text-white tracking-wide">8 spots left this month</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#6b7280] line-through">$99</span>
-            <span className="text-[11px] font-bold text-white">$42 intro rate</span>
-          </div>
+          <span className="text-[11px] font-bold text-white">$29 · one-time</span>
         </div>
 
         <div className="p-8">
@@ -147,7 +145,7 @@ function TutorModal({ onClose }) {
                   Find your tutor.
                 </h3>
                 <p className="text-[13px] text-[#6b6b6b] font-normal mb-7">
-                  Tell us your target. We show you matched tutors — compare side by side before you pick.
+                  Tell us your test and target. We'll get on a call, learn exactly what you need, and match you with 3 tutors you can compare side by side.
                 </p>
 
                 <div className="space-y-4 mb-7">
@@ -193,11 +191,11 @@ function TutorModal({ onClose }) {
                 >
                   Show me my matches →
                 </button>
-                <p className="mt-3 text-center text-[11px] text-[#9ca3af]">$42 locked in. No commitment until you pick.</p>
+                <p className="mt-3 text-center text-[11px] text-[#9ca3af]">$29 locked in. We call you within 24 hours.</p>
               </motion.div>
             )}
 
-            {step === 2 && comparing.length === 0 && (
+            {step === 2 && (
               <motion.div
                 key="step2"
                 initial={{ opacity: 0, x: 8 }}
@@ -209,115 +207,50 @@ function TutorModal({ onClose }) {
                   Your matches.
                 </h3>
                 <p className="text-[13px] text-[#6b6b6b] font-normal mb-6">
-                  All scored in the top 1%. Select up to 2 to compare side by side.
+                  All scored in the top 1%. Pick the one that fits you best.
                 </p>
 
-                <div className="space-y-2.5 mb-6">
-                  {tutors.map((tutor) => {
-                    const isSelected = comparing.includes(tutor.name)
-                    return (
-                      <div
-                        key={tutor.name}
-                        onClick={() => toggleCompare(tutor.name)}
-                        className={`flex items-center gap-4 border rounded-xl p-4 cursor-pointer transition-colors ${
-                          isSelected ? 'border-[#1a1a1a] bg-[#fafafa]' : 'border-[#e5e7eb] hover:border-[#d1d5db]'
-                        }`}
-                      >
+                {/* All 3 tutors side by side */}
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  {tutors.map((tutor, i) => (
+                    <div key={tutor.name} className={`border rounded-xl p-5 flex flex-col gap-4 ${i === 0 ? 'border-[#1a1a1a]' : 'border-[#e5e7eb]'}`}>
+                      {i === 0 && (
+                        <div className="-mt-5 -mx-5 mb-0 bg-[#1a1a1a] rounded-t-xl px-3 py-1.5 text-center">
+                          <span className="text-[10px] font-semibold text-white tracking-wide">Best match</span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2.5">
                         <div className="w-9 h-9 rounded-full bg-[#f3f4f6] flex items-center justify-center flex-shrink-0">
                           <span className="text-[11px] font-bold text-[#1a1a1a]">{tutor.initials}</span>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-[13px] font-semibold text-[#1a1a1a]">{tutor.name}</p>
-                            <span className="text-[10px] text-[#9ca3af] border border-[#e5e7eb] px-1.5 py-0.5 rounded">{tutor.tests}</span>
-                          </div>
-                          <p className="text-[11px] text-[#6b6b6b] font-normal mt-0.5">{tutor.specialty}</p>
-                        </div>
-                        <div className="text-right flex-shrink-0">
-                          <p className="text-[12px] font-bold text-[#1a1a1a]">{tutor.score}</p>
-                          <p className="text-[11px] text-[#9ca3af]">{tutor.rate}</p>
-                        </div>
-                        <div className={`w-4 h-4 rounded border flex-shrink-0 flex items-center justify-center transition-colors ${isSelected ? 'bg-[#1a1a1a] border-[#1a1a1a]' : 'border-[#d1d5db]'}`}>
-                          {isSelected && (
-                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
-                              <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          )}
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                <div className="flex gap-2">
-                  <button
-                    disabled={comparing.length === 0}
-                    onClick={() => comparing.length === 2 && setStep(3)}
-                    className={`flex-1 py-2.5 rounded-lg text-[13px] font-semibold transition-colors border ${
-                      comparing.length === 2
-                        ? 'border-[#1a1a1a] text-[#1a1a1a] hover:bg-[#f9fafb]'
-                        : 'border-[#e5e7eb] text-[#9ca3af] cursor-not-allowed'
-                    }`}
-                  >
-                    Compare {comparing.length === 2 ? '2 selected' : '(select 2)'}
-                  </button>
-                  <button
-                    disabled={comparing.length === 0}
-                    className={`flex-1 py-2.5 rounded-lg text-[13px] font-semibold transition-colors ${
-                      comparing.length > 0
-                        ? 'bg-[#1a1a1a] text-white hover:bg-[#2563eb]'
-                        : 'bg-[#f3f4f6] text-[#9ca3af] cursor-not-allowed'
-                    }`}
-                  >
-                    Claim $42 rate
-                  </button>
-                </div>
-                <p className="mt-3 text-center text-[11px] text-[#9ca3af]">
-                  <button onClick={() => setStep(1)} className="underline hover:text-[#1a1a1a] transition-colors">Back</button>
-                  {' · '}8 spots left
-                </p>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 8 }}
-                transition={{ duration: 0.18 }}
-              >
-                <h3 className="text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight mb-1">
-                  Side by side.
-                </h3>
-                <p className="text-[13px] text-[#6b6b6b] font-normal mb-6">Pick the one that fits you best.</p>
-
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  {comparingTutors.map((tutor) => (
-                    <div key={tutor.name} className="border border-[#e5e7eb] rounded-xl p-5 flex flex-col gap-4">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center flex-shrink-0">
-                          <span className="text-[11px] font-bold text-[#1a1a1a]">{tutor.initials}</span>
-                        </div>
-                        <div>
-                          <p className="text-[13px] font-semibold text-[#1a1a1a]">{tutor.name}</p>
+                        <div className="min-w-0">
+                          <p className="text-[13px] font-semibold text-[#1a1a1a] truncate">{tutor.name}</p>
                           <p className="text-[10px] text-[#9ca3af]">{tutor.tests}</p>
                         </div>
                       </div>
-                      <div className="space-y-2 text-[12px]">
+
+                      <div className="space-y-2 flex-1">
                         {[
                           ['Score', tutor.score],
                           ['Rate', tutor.rate],
                           ['Avg gain', tutor.avgGain],
                           ['Students', `${tutor.students} helped`],
                         ].map(([label, val]) => (
-                          <div key={label} className="flex justify-between">
+                          <div key={label} className="flex justify-between text-[11px]">
                             <span className="text-[#9ca3af]">{label}</span>
                             <span className="font-semibold text-[#1a1a1a]">{val}</span>
                           </div>
                         ))}
+                        <p className="text-[10px] text-[#6b6b6b] pt-1 leading-relaxed border-t border-[#f3f4f6]">
+                          {tutor.specialty}
+                        </p>
                       </div>
-                      <button className="w-full py-2 bg-[#1a1a1a] text-white rounded-lg text-[12px] font-semibold hover:bg-[#2563eb] transition-colors">
+
+                      <button className={`w-full py-2 rounded-lg text-[12px] font-semibold transition-colors ${
+                        i === 0
+                          ? 'bg-[#1a1a1a] text-white hover:bg-[#2563eb]'
+                          : 'border border-[#e5e7eb] text-[#1a1a1a] hover:border-[#1a1a1a]'
+                      }`}>
                         Choose {tutor.name.split(' ')[0]}
                       </button>
                     </div>
@@ -325,10 +258,8 @@ function TutorModal({ onClose }) {
                 </div>
 
                 <p className="text-center text-[11px] text-[#9ca3af]">
-                  <button onClick={() => { setStep(2); setComparing([]) }} className="underline hover:text-[#1a1a1a] transition-colors">
-                    ← See all tutors
-                  </button>
-                  {' · '}$42 one-time · 8 spots left
+                  <button onClick={() => setStep(1)} className="underline hover:text-[#1a1a1a] transition-colors">← Back</button>
+                  {' · '}$29 one-time · 8 spots left this month
                 </p>
               </motion.div>
             )}
@@ -351,12 +282,13 @@ export default function Pricing() {
             Simple, honest pricing.
           </h2>
           <p className="mt-3 text-[16px] text-[#6b6b6b] font-normal">
-            Free to start. $8/month for everything. Most students upgrade within a week.
+            Free to start. One-time to own it. Most students upgrade within a week.
           </p>
         </div>
 
-        {/* Two plan columns */}
-        <div className="grid grid-cols-2 gap-5 max-w-3xl">
+        {/* Three plans side by side */}
+        <div className="grid grid-cols-3 gap-5">
+
           {/* Free */}
           <motion.div
             className="bg-white border border-[#e5e7eb] rounded-2xl p-8 flex flex-col"
@@ -389,12 +321,11 @@ export default function Pricing() {
             </a>
           </motion.div>
 
-          {/* Student — always positioned as the right choice */}
+          {/* Student — always the best pick */}
           <motion.div
             className="bg-white border-2 border-[#1a1a1a] rounded-2xl p-8 flex flex-col relative"
             whileHover={{ y: -3, transition: { duration: 0.18, ease: 'easeOut' } }}
           >
-            {/* Best value tag */}
             <div className="absolute -top-3.5 left-6">
               <span className="bg-[#1a1a1a] text-white text-[10px] font-bold px-3 py-1 rounded-full tracking-wide">
                 Best for most students
@@ -407,14 +338,14 @@ export default function Pricing() {
                 Full access
               </span>
             </div>
-            <p className="text-[12px] text-[#9ca3af] font-normal mb-6">Everything, for the length of your application season.</p>
+            <p className="text-[12px] text-[#9ca3af] font-normal mb-6">Everything for your entire application season.</p>
 
             <div className="mb-8">
               <div className="flex items-end gap-2">
-                <span className="text-[42px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-none">$8</span>
-                <span className="text-[13px] text-[#9ca3af] mb-1.5 font-normal">/ month</span>
+                <span className="text-[42px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-none">$42</span>
+                <span className="text-[13px] text-[#9ca3af] mb-1.5 font-normal">one-time</span>
               </div>
-              <p className="mt-1.5 text-[12px] text-[#9ca3af] font-normal">Cancel any time. No commitment.</p>
+              <p className="mt-1.5 text-[12px] text-[#9ca3af] font-normal">Pay once. Yours for the full season.</p>
             </div>
 
             <ul className="space-y-3 flex-1 mb-8">
@@ -432,54 +363,52 @@ export default function Pricing() {
             >
               Get started
             </a>
-            <p className="mt-2.5 text-center text-[11px] text-[#9ca3af]">Most students upgrade within a week of signing up.</p>
+            <p className="mt-2.5 text-center text-[11px] text-[#9ca3af]">Most students upgrade within a week.</p>
           </motion.div>
-        </div>
 
-        {/* Tutor matching add-on */}
-        <div className="mt-5 max-w-3xl">
-          <div className="bg-[#1a1a1a] rounded-2xl overflow-hidden">
-            <div className="bg-[#2563eb] px-6 py-2.5 flex items-center gap-2">
+          {/* Tutor Connection */}
+          <motion.div
+            className="bg-white border border-[#e5e7eb] rounded-2xl p-8 flex flex-col relative overflow-hidden"
+            whileHover={{ y: -3, transition: { duration: 0.18, ease: 'easeOut' } }}
+          >
+            {/* Limited banner inside card */}
+            <div className="absolute top-0 left-0 right-0 bg-[#2563eb] px-4 py-1.5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span className="text-[11px] font-semibold text-white tracking-wide">Limited intro offer — 8 spots left this month</span>
-              <span className="ml-auto text-[11px] text-white/60 line-through">$99</span>
-              <span className="ml-1.5 text-[11px] font-bold text-white">$42 today</span>
+              <span className="text-[10px] font-semibold text-white tracking-wide">8 spots left this month</span>
             </div>
 
-            <div className="p-7 grid grid-cols-[1fr_auto] gap-8 items-center">
-              <div>
-                <p className="text-[11px] font-semibold text-[#6b6b6b] uppercase tracking-widest mb-3">Tutor Matching</p>
-                <h3 className="text-[20px] font-black tracking-[-0.03em] text-white leading-tight mb-2">
-                  Get matched with the right ACT or SAT tutor.
-                </h3>
-                <p className="text-[13px] text-[#9ca3af] leading-relaxed font-normal">
-                  Tell us your target score. We match you with a top-1% scorer who specializes in exactly that — not a marketplace, a personal match. Compare options side by side before you commit.
-                </p>
-                <div className="flex items-center gap-4 mt-4">
-                  {['Top 1% scorers only', 'SAT & ACT', 'Compare before you pick'].map((tag, i) => (
-                    <span key={i} className="flex items-center gap-1.5 text-[11px] text-[#6b6b6b] font-normal">
-                      <span className="w-1 h-1 rounded-full bg-[#6b6b6b]" />
-                      {tag}
-                    </span>
-                  ))}
+            <div className="mt-6">
+              <p className="text-[13px] font-semibold text-[#1a1a1a] mb-1">Tutor Connection</p>
+              <p className="text-[12px] text-[#9ca3af] font-normal mb-6">A call + a personal match with the right tutor.</p>
+
+              <div className="mb-8">
+                <div className="flex items-end gap-2">
+                  <span className="text-[42px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-none">$29</span>
+                  <span className="text-[13px] text-[#9ca3af] mb-1.5 font-normal">one-time</span>
                 </div>
+                <p className="mt-1.5 text-[12px] text-[#9ca3af] font-normal">30-min call. Matched in 24 hours.</p>
               </div>
-              <div className="text-right flex-shrink-0">
-                <div className="mb-4">
-                  <span className="text-[38px] font-black tracking-[-0.04em] text-white leading-none">$42</span>
-                  <p className="text-[12px] text-[#6b6b6b] mt-1 font-normal">one-time · compare &amp; pick</p>
-                </div>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="inline-block text-[13px] font-medium px-6 py-2.5 bg-[#2563eb] text-white rounded-lg hover:bg-[#1d4ed8] transition-colors whitespace-nowrap"
-                >
-                  Find my tutor →
-                </button>
-              </div>
+
+              <ul className="space-y-3 flex-1 mb-8">
+                {tutorFeatures.map((text, i) => (
+                  <li key={i} className="flex items-start gap-2.5">
+                    <Check />
+                    <span className="text-[13px] text-[#1a1a1a] leading-snug font-normal">{text}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+
+            <button
+              onClick={() => setModalOpen(true)}
+              className="w-full text-center text-[13px] font-medium py-2.5 rounded-lg bg-[#2563eb] text-white hover:bg-[#1d4ed8] transition-colors"
+            >
+              Find my tutor →
+            </button>
+            <p className="mt-2.5 text-center text-[11px] text-[#9ca3af]">Compare all 3 matches before you decide.</p>
+          </motion.div>
+
         </div>
-
       </div>
 
       <AnimatePresence>
