@@ -98,16 +98,19 @@ function EssayReviewCard() {
 const features = [
   {
     Card: FitScoreCard,
+    bg: '#d8e8fb',
     headline: 'Know where you stand.',
     description: 'Fit scores built from real Common Data Set figures — GPA, test scores, acceptance rates — so you apply strategically.',
   },
   {
     Card: ActionPlanCard,
+    bg: '#efe6d8',
     headline: 'Never miss a deadline.',
     description: 'A prioritized checklist that updates as you progress. Every task, every due date, in one place.',
   },
   {
     Card: EssayReviewCard,
+    bg: '#d8e9e1',
     headline: 'Essays that actually stand out.',
     description: 'Inline feedback trained on admitted essays. Get specific suggestions, not generic advice.',
   },
@@ -127,9 +130,11 @@ export default function Features() {
         </div>
 
         <div className="grid grid-cols-3 gap-8">
-          {features.map(({ Card, headline, description }, i) => (
+          {features.map(({ Card, bg, headline, description }, i) => (
             <div key={i} className="flex flex-col gap-5">
-              <Card />
+              <div className="rounded-2xl p-4" style={{ background: bg }}>
+                <Card />
+              </div>
               <div>
                 <h3 className="text-[15px] font-bold tracking-tight text-[#1a1a1a]">
                   {headline}

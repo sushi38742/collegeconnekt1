@@ -33,7 +33,7 @@ function SchoolListUI() {
   ]
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="flex flex-col">
       <div className="px-5 py-3 border-b border-[#e5e7eb] flex items-center justify-between">
         <span className="text-[12px] font-semibold text-[#1a1a1a]">My School List</span>
         <span className="text-[11px] text-[#9ca3af]">Fall 2026 · 8 schools</span>
@@ -66,7 +66,7 @@ function SchoolListUI() {
 
 export default function FeatureShowcase() {
   return (
-    <section className="py-24 px-6 bg-[#f9fafb] border-t border-[#e5e7eb]">
+    <section className="py-24 px-6 bg-white border-t border-[#e5e7eb]">
       <div className="max-w-6xl mx-auto">
 
         {/* Main showcase card */}
@@ -96,9 +96,11 @@ export default function FeatureShowcase() {
             </div>
           </div>
 
-          {/* Right panel */}
-          <div className="overflow-hidden">
-            <SchoolListUI />
+          {/* Right panel — colored tinted field, white card floats inside */}
+          <div className="bg-[#efe6d8] p-6 flex flex-col justify-center overflow-hidden">
+            <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.06)] shadow-[0_2px_16px_rgba(0,0,0,0.06)] overflow-hidden">
+              <SchoolListUI />
+            </div>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 function CollegeProfileUI() {
   return (
-    <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden text-left mt-6">
+    <div className="text-left">
       <div className="px-5 py-4 border-b border-[#e5e7eb]">
         <p className="text-[13px] font-bold text-[#1a1a1a]">Northwestern University</p>
         <p className="text-[11px] text-[#9ca3af] mt-0.5">Evanston, IL · Private Research University</p>
@@ -46,7 +46,7 @@ function DocumentVaultUI() {
   ]
 
   return (
-    <div className="bg-white rounded-xl border border-[#e5e7eb] overflow-hidden text-left mt-6">
+    <div className="text-left">
       <div className="px-4 py-3 border-b border-[#e5e7eb] flex items-center justify-between">
         <span className="text-[12px] font-semibold text-[#1a1a1a]">Document Vault</span>
         <button className="text-[11px] text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">+ Upload</button>
@@ -72,12 +72,14 @@ const cards = [
     headline: 'Deep dive on any college.',
     desc: 'Real CDS data, acceptance rates, and a fit score — all pulled automatically when you add a school to your list.',
     UI: CollegeProfileUI,
+    panelBg: '#d8e8fb',
   },
   {
     label: 'Document Vault',
     headline: 'One place for everything.',
     desc: 'Essays, transcripts, test scores, and rec letters — organized by school and always one click away.',
     UI: DocumentVaultUI,
+    panelBg: '#d8e9e1',
   },
 ]
 
@@ -86,9 +88,9 @@ export default function SplitFeatures() {
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 gap-6">
-          {cards.map(({ label, headline, desc, UI }, i) => (
-            <div key={i} className="border border-[#e5e7eb] rounded-2xl overflow-hidden bg-white">
-              <div className="p-8 pb-2">
+          {cards.map(({ label, headline, desc, UI, panelBg }, i) => (
+            <div key={i} className="border border-[#e5e7eb] rounded-2xl overflow-hidden bg-white flex flex-col">
+              <div className="p-8 pb-5">
                 <p className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">{label}</p>
                 <div className="flex items-start justify-between gap-4">
                   <h3 className="text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight">
@@ -102,8 +104,11 @@ export default function SplitFeatures() {
                 </div>
                 <p className="mt-2 text-[13px] text-[#6b6b6b] leading-relaxed font-normal">{desc}</p>
               </div>
-              <div className="px-8 pb-8">
-                <UI />
+              {/* Colored tinted panel — white card floats inside */}
+              <div className="flex-1 p-6 mx-0" style={{ background: panelBg }}>
+                <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.06)] shadow-[0_2px_12px_rgba(0,0,0,0.05)] overflow-hidden">
+                  <UI />
+                </div>
               </div>
             </div>
           ))}

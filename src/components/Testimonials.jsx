@@ -36,14 +36,14 @@ function Avatar({ initials }) {
 
 export default function Testimonials() {
   return (
-    <section className="py-24 px-6 bg-[#f9fafb] border-t border-[#e5e7eb]">
+    <section className="py-24 px-6 bg-white border-t border-[#e5e7eb]">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-[40px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-tight mb-10">
           Students who got in.
         </h2>
 
         {/* Featured card */}
-        <div className="bg-white border border-[#e5e7eb] rounded-2xl p-10 mb-4 grid grid-cols-[1fr_auto] gap-12 items-start">
+        <div className="bg-[#efe6d8] border border-[rgba(0,0,0,0.06)] rounded-2xl p-10 mb-4 grid grid-cols-[1fr_auto] gap-12 items-start">
           <div>
             <p className="text-[22px] font-normal text-[#1a1a1a] leading-snug tracking-tight">
               "{featured.quote}"
