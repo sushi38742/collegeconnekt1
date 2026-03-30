@@ -13,7 +13,7 @@ export default function SocialProof() {
           {stats.map((stat, i) => (
             <div key={i} className="flex items-center">
               <div className="px-10 text-center">
-                <p className="text-[20px] font-display font-bold text-[#1a1a1a] tracking-tight">
+                <p className="text-[20px] font-bold text-[#1a1a1a] tracking-tight">
                   {stat.value}
                 </p>
                 <p className="mt-1 text-[11px] font-medium text-[#6b6b6b] uppercase tracking-widest">

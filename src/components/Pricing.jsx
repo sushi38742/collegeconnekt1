@@ -81,7 +81,7 @@ export default function Pricing() {
     <section className="py-24 px-6 bg-[#f9fafb] border-t border-[#e5e7eb]">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="font-display font-bold text-[36px] tracking-tight text-[#1a1a1a]">
+          <h2 className="font-black text-[36px] tracking-tight text-[#1a1a1a]">
             Simple, honest pricing.
           </h2>
           <p className="mt-3 text-[16px] text-[#6b6b6b]">
@@ -142,13 +142,13 @@ export default function Pricing() {
               <div className="mb-6">
                 {plan.price.monthly ? (
                   <div className="flex items-end gap-1">
-                    <span className="text-[32px] font-display font-bold text-[#1a1a1a] leading-none">
+                    <span className="text-[32px] font-black text-[#1a1a1a] leading-none">
                       ${annual ? Math.round(plan.price.annual / 12) : plan.price.monthly}
                     </span>
                     <span className="text-[13px] text-[#6b6b6b] mb-1">/ month</span>
                   </div>
                 ) : (
-                  <span className="text-[32px] font-display font-bold text-[#1a1a1a] leading-none">Free</span>
+                  <span className="text-[32px] font-black text-[#1a1a1a] leading-none">Free</span>
                 )}
                 {plan.price.annual && annual && (
                   <p className="mt-1 text-[11px] text-[#6b6b6b]">

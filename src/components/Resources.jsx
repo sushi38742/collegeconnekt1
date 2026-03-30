@@ -43,7 +43,7 @@ export default function Resources() {
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="text-[11px] font-semibold text-[#6b6b6b] uppercase tracking-wide mb-2">From the blog</p>
-            <h2 className="font-display font-bold text-[36px] tracking-tight text-[#1a1a1a]">
+            <h2 className="font-black text-[36px] tracking-tight text-[#1a1a1a]">
               The knowledge you actually need.
             </h2>
           </div>
@@ -63,7 +63,7 @@ export default function Resources() {
               <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded mb-4 ${categoryColor[articles[0].category]}`}>
                 {articles[0].category}
               </span>
-              <h3 className="font-display font-bold text-[20px] leading-snug tracking-tight text-[#1a1a1a] group-hover:text-[#2563eb] transition-colors">
+              <h3 className="font-black text-[20px] leading-snug tracking-tight text-[#1a1a1a] group-hover:text-[#2563eb] transition-colors">
                 {articles[0].title}
               </h3>
               <p className="mt-3 text-[13px] text-[#6b6b6b] leading-relaxed">{articles[0].excerpt}</p>
@@ -89,7 +89,7 @@ export default function Resources() {
                     </span>
                     <span className="text-[10px] text-[#9ca3af]">{article.date}</span>
                   </div>
-                  <h3 className="font-display font-bold text-[15px] leading-snug tracking-tight text-[#1a1a1a] group-hover:text-[#2563eb] transition-colors">
+                  <h3 className="font-black text-[15px] leading-snug tracking-tight text-[#1a1a1a] group-hover:text-[#2563eb] transition-colors">
                     {article.title}
                   </h3>
                   <p className="mt-1 text-[12px] text-[#6b6b6b] leading-relaxed line-clamp-2">{article.excerpt}</p>

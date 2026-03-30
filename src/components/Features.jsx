@@ -1,77 +1,69 @@
 function FitScoreCard() {
   const schools = [
-    { name: 'University of Michigan', match: 91 },
-    { name: 'UC Berkeley', match: 74 },
-    { name: 'NYU', match: 88 },
+    { name: 'University of Michigan', accept: '17%', gpa: '3.88', sat: '1480', fit: 91 },
+    { name: 'UC Berkeley', accept: '14%', gpa: '3.92', sat: '1510', fit: 74 },
+    { name: 'New York University', accept: '12%', gpa: '3.78', sat: '1450', fit: 88 },
   ]
 
   return (
     <div className="border border-[#e5e7eb] rounded-xl overflow-hidden bg-white">
-      <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-4 py-3">
-        <span className="text-[11px] font-medium text-[#6b6b6b] uppercase tracking-wide">School Fit Scores</span>
+      <div className="px-4 py-3 border-b border-[#e5e7eb]">
+        <span className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest">Fit Scores</span>
       </div>
-      <div className="p-4 space-y-4">
-        {schools.map((school, i) => (
-          <div key={i}>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[12px] font-medium text-[#1a1a1a]">{school.name}</span>
-              <span className={`text-[12px] font-bold ${school.match >= 85 ? 'text-[#16a34a]' : 'text-[#2563eb]'}`}>
-                {school.match}%
-              </span>
-            </div>
-            <div className="w-full bg-[#f3f4f6] rounded-full h-1.5">
-              <div
-                className={`h-1.5 rounded-full ${school.match >= 85 ? 'bg-[#16a34a]' : 'bg-[#2563eb]'}`}
-                style={{ width: `${school.match}%` }}
-              />
-            </div>
-            <div className="flex gap-4 mt-1.5">
-              <span className="text-[10px] text-[#6b6b6b]">Avg GPA 3.{Math.floor(5 + i * 1.5)}</span>
-              <span className="text-[10px] text-[#6b6b6b]">Mid SAT {1480 + i * 30}</span>
-            </div>
-          </div>
-        ))}
-      </div>
+      <table className="w-full">
+        <thead>
+          <tr className="border-b border-[#f3f4f6]">
+            <th className="px-4 py-2 text-left text-[10px] font-medium text-[#9ca3af]">School</th>
+            <th className="px-4 py-2 text-right text-[10px] font-medium text-[#9ca3af]">Accept</th>
+            <th className="px-4 py-2 text-right text-[10px] font-medium text-[#9ca3af]">Mid SAT</th>
+            <th className="px-4 py-2 text-right text-[10px] font-medium text-[#9ca3af]">Fit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {schools.map((s, i) => (
+            <tr key={i} className={i < schools.length - 1 ? 'border-b border-[#f3f4f6]' : ''}>
+              <td className="px-4 py-3 text-[12px] font-medium text-[#1a1a1a]">{s.name}</td>
+              <td className="px-4 py-3 text-right text-[12px] text-[#6b6b6b]">{s.accept}</td>
+              <td className="px-4 py-3 text-right text-[12px] text-[#6b6b6b]">{s.sat}</td>
+              <td className="px-4 py-3 text-right text-[12px] font-semibold text-[#1a1a1a]">{s.fit}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
 
 function ActionPlanCard() {
   const items = [
-    { text: 'Request teacher recommendation from Mr. Chen', priority: 'High', done: true },
-    { text: 'Complete FAFSA for all schools', priority: 'High', done: false },
-    { text: 'Revise Common App personal statement', priority: 'Due Nov 1', done: false },
-    { text: 'Review financial aid package from UMich', priority: 'Pending', done: false },
+    { text: 'Request rec letter — Mr. Chen', date: null, done: true },
+    { text: 'Complete FAFSA', date: 'Oct 15', done: false },
+    { text: 'Revise personal statement', date: 'Oct 28', done: false },
+    { text: 'Submit Common App', date: 'Nov 1', done: false },
   ]
 
   return (
     <div className="border border-[#e5e7eb] rounded-xl overflow-hidden bg-white">
-      <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-4 py-3 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-[#6b6b6b] uppercase tracking-wide">Action Plan</span>
-        <span className="text-[10px] text-[#6b6b6b]">3 of 4 done</span>
+      <div className="px-4 py-3 border-b border-[#e5e7eb] flex items-center justify-between">
+        <span className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest">Action Plan</span>
+        <span className="text-[11px] text-[#9ca3af]">1 of 4 done</span>
       </div>
-      <div className="p-4 space-y-3">
+      <div className="divide-y divide-[#f3f4f6]">
         {items.map((item, i) => (
-          <div key={i} className="flex items-start gap-2.5">
-            <div className={`mt-0.5 w-4 h-4 rounded flex-shrink-0 border flex items-center justify-center ${item.done ? 'bg-[#2563eb] border-[#2563eb]' : 'border-[#d1d5db]'}`}>
+          <div key={i} className="px-4 py-3 flex items-center gap-3">
+            <div className={`w-3.5 h-3.5 rounded-sm border flex-shrink-0 flex items-center justify-center ${item.done ? 'bg-[#1a1a1a] border-[#1a1a1a]' : 'border-[#d1d5db]'}`}>
               {item.done && (
-                <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
-                  <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                  <path d="M1.5 4l1.5 1.5 3.5-3" stroke="white" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               )}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className={`text-[12px] leading-snug ${item.done ? 'line-through text-[#9ca3af]' : 'text-[#1a1a1a]'}`}>
-                {item.text}
-              </p>
-              <span className={`inline-block mt-1 text-[10px] px-1.5 py-0.5 rounded font-medium ${
-                item.priority === 'High' ? 'bg-[#fef2f2] text-[#dc2626]' :
-                item.priority === 'Pending' ? 'bg-[#f3f4f6] text-[#6b7280]' :
-                'bg-[#fefce8] text-[#92400e]'
-              }`}>
-                {item.priority}
-              </span>
-            </div>
+            <p className={`flex-1 text-[12px] ${item.done ? 'line-through text-[#9ca3af]' : 'text-[#1a1a1a]'}`}>
+              {item.text}
+            </p>
+            {item.date && (
+              <span className="text-[11px] text-[#9ca3af] flex-shrink-0">{item.date}</span>
+            )}
           </div>
         ))}
       </div>
@@ -82,32 +74,21 @@ function ActionPlanCard() {
 function EssayReviewCard() {
   return (
     <div className="border border-[#e5e7eb] rounded-xl overflow-hidden bg-white">
-      <div className="bg-[#f9fafb] border-b border-[#e5e7eb] px-4 py-3 flex items-center justify-between">
-        <span className="text-[11px] font-medium text-[#6b6b6b] uppercase tracking-wide">Essay Review</span>
-        <span className="text-[10px] bg-[#eff6ff] text-[#2563eb] font-medium px-2 py-0.5 rounded">AI Feedback</span>
+      <div className="px-4 py-3 border-b border-[#e5e7eb] flex items-center justify-between">
+        <span className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest">Essay Review</span>
+        <span className="text-[11px] text-[#9ca3af]">Draft 2 of 3</span>
       </div>
       <div className="p-4 space-y-3">
         <p className="text-[12px] leading-relaxed text-[#1a1a1a]">
           Growing up in a household where two languages collided at the dinner table, I learned early that translation is never just about words — it's about{' '}
-          <span className="bg-[#fef9c3] border-b-2 border-[#eab308] cursor-default">bridging entire worlds.</span>{' '}
+          <span className="bg-[#fef9c3]">bridging entire worlds.</span>{' '}
           My grandmother's stories, half in Tagalog and half in English, became the maps I used to navigate between cultures.
         </p>
-        <div className="bg-[#eff6ff] border border-[#bfdbfe] rounded-lg p-3">
-          <div className="flex items-center gap-1.5 mb-1">
-            <div className="w-3 h-3 rounded-full bg-[#2563eb] flex items-center justify-center">
-              <span className="text-[8px] text-white font-bold">i</span>
-            </div>
-            <p className="text-[11px] text-[#1d4ed8] font-medium">CollegeConnekt AI</p>
-          </div>
-          <p className="text-[11px] text-[#1e40af] leading-relaxed">
-            Strong metaphor. Ground this with a specific memory — what was one story she told? A concrete scene here would make the opening unforgettable.
+        <div className="border-l-2 border-[#e5e7eb] pl-3">
+          <p className="text-[10px] font-semibold text-[#6b6b6b] mb-0.5">CollegeConnekt</p>
+          <p className="text-[11px] text-[#6b6b6b] leading-relaxed">
+            Strong metaphor. Add one specific memory here — a scene, not a summary.
           </p>
-        </div>
-        <div className="flex items-center gap-3 pt-1">
-          <div className="flex-1 bg-[#f3f4f6] rounded-full h-1">
-            <div className="bg-[#2563eb] h-1 rounded-full" style={{ width: '68%' }} />
-          </div>
-          <span className="text-[10px] text-[#6b6b6b] whitespace-nowrap">Draft 2 of 3</span>
         </div>
       </div>
     </div>
@@ -118,7 +99,7 @@ const features = [
   {
     Card: FitScoreCard,
     headline: 'Know where you stand.',
-    description: 'Fit scores built from real Common Data Set figures — GPA, test scores, and acceptance rates — so you apply strategically.',
+    description: 'Fit scores built from real Common Data Set figures — GPA, test scores, acceptance rates — so you apply strategically.',
   },
   {
     Card: ActionPlanCard,
@@ -128,7 +109,7 @@ const features = [
   {
     Card: EssayReviewCard,
     headline: 'Essays that actually stand out.',
-    description: 'Inline AI feedback trained on admitted essays. Get specific suggestions, not generic advice.',
+    description: 'Inline feedback trained on admitted essays. Get specific suggestions, not generic advice.',
   },
 ]
 
@@ -136,11 +117,11 @@ export default function Features() {
   return (
     <section className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="font-display font-bold text-[36px] tracking-tight text-[#1a1a1a]">
-            Everything you need. Nothing you don't.
+        <div className="mb-14">
+          <h2 className="text-[40px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-tight">
+            Everything you need.<br />Nothing you don't.
           </h2>
-          <p className="mt-3 text-[16px] text-[#6b6b6b]">
+          <p className="mt-3 text-[16px] text-[#6b6b6b] font-normal">
             Built for the way students actually apply to college.
           </p>
         </div>
@@ -150,10 +131,10 @@ export default function Features() {
             <div key={i} className="flex flex-col gap-5">
               <Card />
               <div>
-                <h3 className="font-display font-bold text-[16px] text-[#1a1a1a] tracking-tight">
+                <h3 className="text-[15px] font-bold tracking-tight text-[#1a1a1a]">
                   {headline}
                 </h3>
-                <p className="mt-1.5 text-[14px] text-[#6b6b6b] leading-relaxed">
+                <p className="mt-1 text-[13px] text-[#6b6b6b] leading-relaxed font-normal">
                   {description}
                 </p>
               </div>
