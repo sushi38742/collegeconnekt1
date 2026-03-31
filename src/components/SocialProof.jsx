@@ -83,7 +83,7 @@ export default function SocialProof() {
           <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#f9fafb] to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#f9fafb] to-transparent z-10 pointer-events-none" />
 
-          <div className="flex animate-marquee whitespace-nowrap gap-0">
+          <div className="animate-marquee flex items-center">
             {allBadges.map((badge, i) => (
               <div
                 key={i}

@@ -32,9 +32,14 @@ h1, h2, h3, h4 {
 }
 
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 18s linear infinite;
+  will-change: transform;
+  width: max-content;
+  flex-wrap: nowrap;
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
+@media (max-width: 640px) {
+  .animate-marquee {
+    animation-duration: 14s;
+  }
 }
