@@ -27,18 +27,21 @@ export default function Schools({ data, reload }) {
   const [adding, setAdding] = useState(false)
   const debounceRef = useRef(null)
 
+  const [showDropdown, setShowDropdown] = useState(false)
+
   useEffect(() => {
-    if (!query.trim()) { setResults([]); return }
+    if (!query.trim()) { setResults([]); setShowDropdown(false); return }
     clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(async () => {
       const { data: rows } = await supabase
         .from('schools').select('id, name, state, type').ilike('name', `%${query}%`).limit(6)
       setResults(rows ?? [])
+      setShowDropdown(true)
     }, 250)
     return () => clearTimeout(debounceRef.current)
   }, [query])
 
-  async function addSchool(school) {
+  async function saveSchool(school) {
     const plan = profile?.plan ?? 'free'
     const savedCount = data.schools.length
     if (plan === 'free' && savedCount >= 3) {
@@ -46,11 +49,25 @@ export default function Schools({ data, reload }) {
       return
     }
     setAdding(true)
-    setQuery(''); setResults([])
+    setQuery(''); setResults([]); setShowDropdown(false)
     await supabase.from('saved_schools').insert({ user_id: session.user.id, school_id: school.id })
     supabase.functions.invoke('generate-fit-score', { body: { user_id: session.user.id, school_id: school.id } })
     await reload()
     setAdding(false)
+  }
+
+  async function addCustomSchool() {
+    const name = query.trim()
+    if (!name) return
+    const { data: newSchool, error } = await supabase
+      .from('schools').insert({ name }).select('id, name, state, type').single()
+    if (!error && newSchool) {
+      saveSchool(newSchool)
+    } else {
+      const { data: existing } = await supabase
+        .from('schools').select('id, name, state, type').ilike('name', name).single()
+      if (existing) saveSchool(existing)
+    }
   }
 
   async function removeSchool(savedId) {
@@ -69,18 +86,25 @@ export default function Schools({ data, reload }) {
         <div className="relative w-56">
           <input
             value={query} onChange={e => setQuery(e.target.value)}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
+            onFocus={() => query.trim() && setShowDropdown(true)}
             placeholder="Add a school…"
             className="w-full border border-[#e5e7eb] rounded-lg px-3.5 py-2 text-[13px] text-[#1a1a1a] placeholder-[#9ca3af] outline-none focus:border-[#1a1a1a] transition-colors"
           />
-          {results.length > 0 && (
+          {showDropdown && query.trim() && (
             <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-lg overflow-hidden">
               {results.map(s => (
-                <button key={s.id} type="button" onClick={() => addSchool(s)}
+                <button key={s.id} type="button" onMouseDown={() => saveSchool(s)}
                   className="w-full flex items-center justify-between px-3.5 py-2.5 hover:bg-[#f9fafb] transition-colors text-left border-b border-[#f3f4f6] last:border-0">
                   <span className="text-[12px] font-medium text-[#1a1a1a]">{s.name}</span>
                   <span className="text-[10px] text-[#9ca3af]">{s.state}</span>
                 </button>
               ))}
+              <button type="button" onMouseDown={addCustomSchool}
+                className="w-full flex items-center gap-2 px-3.5 py-2.5 hover:bg-[#f0f9ff] transition-colors text-left border-t border-[#f3f4f6]">
+                <span className="text-[10px] font-semibold text-[#2563eb] bg-[#dbeafe] px-2 py-0.5 rounded-full">+ Add</span>
+                <span className="text-[12px] font-medium text-[#1a1a1a]">{query.trim()}</span>
+              </button>
             </div>
           )}
         </div>

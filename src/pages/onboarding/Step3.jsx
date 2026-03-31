@@ -21,12 +21,13 @@ function SchoolChip({ school, onRemove }) {
 export default function Step3({ onSubmit, saving }) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState([])
-  const [selected, setSelected] = useState([]) // [{id, name, state}]
+  const [selected, setSelected] = useState([])
   const [searching, setSearching] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
   const debounceRef = useRef(null)
 
   useEffect(() => {
-    if (!query.trim()) { setResults([]); return }
+    if (!query.trim()) { setResults([]); setShowDropdown(false); return }
     clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(async () => {
       setSearching(true)
@@ -36,17 +37,56 @@ export default function Step3({ onSubmit, saving }) {
         .ilike('name', `%${query}%`)
         .limit(8)
       setResults(data ?? [])
+      setShowDropdown(true)
       setSearching(false)
     }, 250)
     return () => clearTimeout(debounceRef.current)
   }, [query])
 
-  function addSchool(school) {
+  async function addSchool(school) {
     if (selected.find(s => s.id === school.id)) return
     if (selected.length >= 15) return
     setSelected(prev => [...prev, school])
     setQuery('')
     setResults([])
+    setShowDropdown(false)
+  }
+
+  async function addCustomSchool() {
+    const name = query.trim()
+    if (!name) return
+    // Check if already selected by name
+    if (selected.find(s => s.name.toLowerCase() === name.toLowerCase())) {
+      setQuery(''); setShowDropdown(false); return
+    }
+    // Insert into schools table and get the new id
+    const { data, error } = await supabase
+      .from('schools')
+      .insert({ name })
+      .select('id, name, state, type')
+      .single()
+    if (!error && data) {
+      addSchool(data)
+    } else {
+      // If insert failed (e.g. already exists with different case), try selecting it
+      const { data: existing } = await supabase
+        .from('schools')
+        .select('id, name, state, type')
+        .ilike('name', name)
+        .single()
+      if (existing) addSchool(existing)
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      if (results.length > 0) {
+        addSchool(results[0])
+      } else if (query.trim()) {
+        addCustomSchool()
+      }
+    }
   }
 
   function handleSubmit(e) {
@@ -63,35 +103,48 @@ export default function Step3({ onSubmit, saving }) {
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Search */}
         <div className="relative">
           <label className="block text-[11px] font-semibold text-[#1a1a1a] uppercase tracking-widest mb-1.5">Search schools</label>
           <input
-            value={query} onChange={e => setQuery(e.target.value)}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onFocus={() => (results.length > 0 || query.trim()) && setShowDropdown(true)}
+            onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
             className="w-full border border-[#e5e7eb] rounded-lg px-3.5 py-2.5 text-[13px] text-[#1a1a1a] placeholder-[#9ca3af] outline-none focus:border-[#1a1a1a] transition-colors"
             placeholder="e.g. MIT, UCLA, Michigan…"
           />
-          {results.length > 0 && (
+
+          {showDropdown && query.trim() && (
             <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] overflow-hidden">
               {results.map(school => (
                 <button
                   key={school.id}
                   type="button"
-                  onClick={() => addSchool(school)}
+                  onMouseDown={() => addSchool(school)}
                   className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#f9fafb] transition-colors text-left border-b border-[#f3f4f6] last:border-0"
                 >
                   <span className="text-[13px] font-medium text-[#1a1a1a]">{school.name}</span>
-                  <span className="text-[11px] text-[#9ca3af]">{school.state} · {school.type}</span>
+                  <span className="text-[11px] text-[#9ca3af]">{school.state}{school.type ? ` · ${school.type}` : ''}</span>
                 </button>
               ))}
+              {/* Always show "Add [query]" option */}
+              <button
+                type="button"
+                onMouseDown={addCustomSchool}
+                className="w-full flex items-center gap-2 px-4 py-3 hover:bg-[#f0f9ff] transition-colors text-left border-t border-[#f3f4f6]"
+              >
+                <span className="text-[11px] font-semibold text-[#2563eb] bg-[#dbeafe] px-2 py-0.5 rounded-full">+ Add</span>
+                <span className="text-[13px] font-medium text-[#1a1a1a]">{query.trim()}</span>
+              </button>
             </div>
           )}
+
           {searching && (
             <div className="absolute right-3 top-9 w-4 h-4 border border-[#e5e7eb] border-t-[#1a1a1a] rounded-full animate-spin" />
           )}
         </div>
 
-        {/* Selected chips */}
         {selected.length > 0 && (
           <div>
             <p className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-2">
