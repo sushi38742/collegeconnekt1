@@ -14,13 +14,17 @@ export default function Signup() {
     e.preventDefault()
     setError('')
     setLoading(true)
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/onboarding/1` },
-    })
-    if (error) setError(error.message)
-    else setDone(true)
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: `${window.location.origin}/onboarding/1` },
+      })
+      if (error) setError(error.message)
+      else setDone(true)
+    } catch (err) {
+      setError(`Network error: ${err.message} — URL: ${import.meta.env.VITE_SUPABASE_URL}`)
+    }
     setLoading(false)
   }
 
