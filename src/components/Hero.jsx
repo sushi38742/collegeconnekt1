@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const fadeUp = {
@@ -133,6 +135,14 @@ function ProductCollage() {
 }
 
 export default function Hero() {
+  const [email, setEmail] = useState('')
+  const navigate = useNavigate()
+
+  function handleGetStarted(e) {
+    e.preventDefault()
+    navigate('/signup', { state: { email } })
+  }
+
   return (
     <section className="pt-14 min-h-screen flex items-center">
       <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center py-16 lg:py-24">
@@ -172,7 +182,8 @@ export default function Hero() {
             Fit scores, essay feedback, and a personalized action plan — all in one place.
           </motion.p>
 
-          <motion.div
+          <motion.form
+            onSubmit={handleGetStarted}
             variants={fadeUp}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 flex flex-col sm:flex-row gap-2 max-w-md"
@@ -180,12 +191,14 @@ export default function Hero() {
             <input
               type="email"
               placeholder="Your email address"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="flex-1 border border-[#e5e7eb] rounded-lg px-4 py-3 text-[14px] text-[#1a1a1a] placeholder-[#9ca3af] outline-none focus:border-[#1a1a1a] transition-colors"
             />
-            <button className="px-5 py-3 bg-[#2563eb] text-white text-[14px] font-semibold rounded-lg hover:bg-[#1d4ed8] transition-colors whitespace-nowrap">
+            <button type="submit" className="px-5 py-3 bg-[#2563eb] text-white text-[14px] font-semibold rounded-lg hover:bg-[#1d4ed8] transition-colors whitespace-nowrap">
               Get started free
             </button>
-          </motion.div>
+          </motion.form>
 
           <motion.div
             variants={fadeUp}
