@@ -20,7 +20,7 @@ export default function Signup() {
         password,
         options: { emailRedirectTo: `${window.location.origin}/onboarding/1` },
       })
-      if (error) setError(error.message)
+      if (error) setError(`${error.message} [${import.meta.env.VITE_SUPABASE_URL ?? 'NO URL'}]`)
       else setDone(true)
     } catch (err) {
       setError(`Network error: ${err.message} — URL: ${import.meta.env.VITE_SUPABASE_URL}`)
