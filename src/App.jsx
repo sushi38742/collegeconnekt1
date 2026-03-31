@@ -7,6 +7,7 @@ import FeatureShowcase from './components/FeatureShowcase'
 import SplitFeatures from './components/SplitFeatures'
 import Testimonials from './components/Testimonials'
 import Resources from './components/Resources'
+import Partnerships from './components/Partnerships'
 import Pricing from './components/Pricing'
 import Footer from './components/Footer'
 
@@ -21,6 +22,7 @@ export default function App() {
       <SplitFeatures />
       <Testimonials />
       <Resources />
+      <Partnerships />
       <Pricing />
       <Footer />
     </div>
