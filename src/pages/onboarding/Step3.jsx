@@ -91,7 +91,6 @@ export default function Step3({ onSubmit, saving }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    if (selected.length === 0) return
     onSubmit(selected.map(s => s.id))
   }
 
@@ -164,12 +163,14 @@ export default function Step3({ onSubmit, saving }) {
 
         <button
           type="submit"
-          disabled={saving || selected.length === 0}
+          disabled={saving}
           className="w-full mt-2 py-3 bg-[#1a1a1a] text-white text-[13px] font-semibold rounded-lg hover:bg-[#2563eb] transition-colors disabled:opacity-50"
         >
-          {saving ? 'Setting up your account…' : `Finish setup${selected.length > 0 ? ` · ${selected.length} school${selected.length !== 1 ? 's' : ''}` : ''}`}
+          {saving ? 'Setting up your account…' : selected.length > 0 ? `Finish setup · ${selected.length} school${selected.length !== 1 ? 's' : ''}` : 'Skip for now'}
         </button>
-        <p className="text-center text-[11px] text-[#9ca3af]">We'll generate fit scores for all your schools instantly.</p>
+        {selected.length > 0 && (
+          <p className="text-center text-[11px] text-[#9ca3af]">We'll generate fit scores for all your schools instantly.</p>
+        )}
       </form>
     </div>
   )

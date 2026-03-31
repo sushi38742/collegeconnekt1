@@ -81,10 +81,12 @@ export default function Onboarding({ step }) {
     setSaving(true)
     setError('')
 
-    // Save schools
-    const rows = schoolIds.map(id => ({ user_id: session.user.id, school_id: id }))
-    const { error: schoolError } = await supabase.from('saved_schools').insert(rows)
-    if (schoolError) { setError(schoolError.message); setSaving(false); return }
+    // Save schools (optional)
+    if (schoolIds.length > 0) {
+      const rows = schoolIds.map(id => ({ user_id: session.user.id, school_id: id }))
+      const { error: schoolError } = await supabase.from('saved_schools').insert(rows)
+      if (schoolError) { setError(schoolError.message); setSaving(false); return }
+    }
 
     // Complete onboarding
     await supabase.from('profiles').update({ onboarding_step: null }).eq('id', session.user.id)
