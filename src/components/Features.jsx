@@ -1,8 +1,8 @@
 function FitScoreCard() {
   const schools = [
-    { name: 'University of Michigan', accept: '17%', gpa: '3.88', sat: '1480', fit: 91 },
-    { name: 'UC Berkeley', accept: '14%', gpa: '3.92', sat: '1510', fit: 74 },
-    { name: 'New York University', accept: '12%', gpa: '3.78', sat: '1450', fit: 88 },
+    { name: 'University of Michigan', accept: '17%', sat: '1480', fit: 91 },
+    { name: 'UC Berkeley', accept: '14%', sat: '1510', fit: 74 },
+    { name: 'New York University', accept: '12%', sat: '1450', fit: 88 },
   ]
 
   return (
@@ -58,12 +58,8 @@ function ActionPlanCard() {
                 </svg>
               )}
             </div>
-            <p className={`flex-1 text-[12px] ${item.done ? 'line-through text-[#9ca3af]' : 'text-[#1a1a1a]'}`}>
-              {item.text}
-            </p>
-            {item.date && (
-              <span className="text-[11px] text-[#9ca3af] flex-shrink-0">{item.date}</span>
-            )}
+            <p className={`flex-1 text-[12px] ${item.done ? 'line-through text-[#9ca3af]' : 'text-[#1a1a1a]'}`}>{item.text}</p>
+            {item.date && <span className="text-[11px] text-[#9ca3af] flex-shrink-0">{item.date}</span>}
           </div>
         ))}
       </div>
@@ -118,30 +114,26 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-20 md:py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-14">
-          <h2 className="text-[40px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-tight">
+        <div className="mb-12 md:mb-14">
+          <h2 className="text-[32px] md:text-[40px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-tight">
             Everything you need.<br />Nothing you don't.
           </h2>
-          <p className="mt-3 text-[16px] text-[#6b6b6b] font-normal">
+          <p className="mt-3 text-[15px] md:text-[16px] text-[#6b6b6b] font-normal">
             Built for the way students actually apply to college.
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map(({ Card, bg, headline, description }, i) => (
             <div key={i} className="flex flex-col gap-5">
               <div className="rounded-2xl p-4" style={{ background: bg }}>
                 <Card />
               </div>
               <div>
-                <h3 className="text-[15px] font-bold tracking-tight text-[#1a1a1a]">
-                  {headline}
-                </h3>
-                <p className="mt-1 text-[13px] text-[#6b6b6b] leading-relaxed font-normal">
-                  {description}
-                </p>
+                <h3 className="text-[15px] font-bold tracking-tight text-[#1a1a1a]">{headline}</h3>
+                <p className="mt-1 text-[13px] text-[#6b6b6b] leading-relaxed font-normal">{description}</p>
               </div>
             </div>
           ))}

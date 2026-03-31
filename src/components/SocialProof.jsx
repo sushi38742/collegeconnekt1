@@ -7,12 +7,12 @@ const stats = [
 
 export default function SocialProof() {
   return (
-    <section className="bg-[#f9fafb] border-y border-[#e5e7eb] py-12">
+    <section className="bg-[#f9fafb] border-y border-[#e5e7eb] py-10">
       <div className="max-w-4xl mx-auto px-6">
-        <div className="flex items-center justify-center gap-0">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0">
           {stats.map((stat, i) => (
-            <div key={i} className="flex items-center">
-              <div className="px-10 text-center">
+            <div key={i} className="flex items-center md:contents">
+              <div className="md:px-8 text-center w-full">
                 <p className="text-[20px] font-bold text-[#1a1a1a] tracking-tight">
                   {stat.value}
                 </p>
@@ -21,7 +21,7 @@ export default function SocialProof() {
                 </p>
               </div>
               {i < stats.length - 1 && (
-                <div className="w-px h-8 bg-[#e5e7eb]" />
+                <div className="hidden md:block w-px h-8 bg-[#e5e7eb]" />
               )}
             </div>
           ))}

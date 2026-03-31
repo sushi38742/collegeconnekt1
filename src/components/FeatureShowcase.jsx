@@ -1,20 +1,8 @@
 const subFeatures = [
-  {
-    label: 'School list builder',
-    desc: 'Build a balanced list of reach, match, and safety schools.',
-  },
-  {
-    label: 'Deadline calendar',
-    desc: 'Every EA, ED, and RD deadline synced in one place.',
-  },
-  {
-    label: 'Decision tracker',
-    desc: 'Log acceptances, waitlists, and rejections as they arrive.',
-  },
-  {
-    label: 'Document vault',
-    desc: 'Essays, transcripts, and test scores — always at hand.',
-  },
+  { label: 'School list builder', desc: 'Build a balanced list of reach, match, and safety schools.' },
+  { label: 'Deadline calendar', desc: 'Every EA, ED, and RD deadline synced in one place.' },
+  { label: 'Decision tracker', desc: 'Log acceptances, waitlists, and rejections as they arrive.' },
+  { label: 'Document vault', desc: 'Essays, transcripts, and test scores — always at hand.' },
 ]
 
 const useCases = [
@@ -38,7 +26,7 @@ function SchoolListUI() {
         <span className="text-[12px] font-semibold text-[#1a1a1a]">My School List</span>
         <span className="text-[11px] text-[#9ca3af]">Fall 2026 · 8 schools</span>
       </div>
-      <table className="w-full flex-1">
+      <table className="w-full">
         <thead>
           <tr className="border-b border-[#f3f4f6] bg-[#fafafa]">
             {['School', 'Type', 'Fit', 'Status'].map(h => (
@@ -66,25 +54,24 @@ function SchoolListUI() {
 
 export default function FeatureShowcase() {
   return (
-    <section className="py-24 px-6 bg-white border-t border-[#e5e7eb]">
+    <section className="py-20 md:py-24 px-6 bg-white border-t border-[#e5e7eb]">
       <div className="max-w-6xl mx-auto">
 
         {/* Main showcase card */}
-        <div className="bg-white rounded-2xl border border-[#e5e7eb] overflow-hidden grid grid-cols-[1fr_1.5fr] min-h-[420px]">
+        <div className="bg-white rounded-2xl border border-[#e5e7eb] overflow-hidden grid grid-cols-1 lg:grid-cols-[1fr_1.5fr]">
           {/* Left panel */}
-          <div className="p-10 flex flex-col border-r border-[#e5e7eb]">
+          <div className="p-8 md:p-10 flex flex-col border-b lg:border-b-0 lg:border-r border-[#e5e7eb]">
             <p className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-4">
               Application Tracking
             </p>
-            <h2 className="text-[26px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight mb-5">
+            <h2 className="text-[22px] md:text-[26px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight mb-5">
               Manage every school, deadline, and decision in one place.
             </h2>
-            <a href="#" className="w-8 h-8 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-10 hover:bg-[#2563eb] transition-colors flex-shrink-0">
+            <a href="#" className="w-8 h-8 rounded-full bg-[#1a1a1a] flex items-center justify-center mb-8 hover:bg-[#2563eb] transition-colors flex-shrink-0">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M3 7h8M8 4l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </a>
-
             <div className="space-y-4 mt-auto">
               {subFeatures.map((f, i) => (
                 <div key={i}>
@@ -96,8 +83,8 @@ export default function FeatureShowcase() {
             </div>
           </div>
 
-          {/* Right panel — colored tinted field, white card floats inside */}
-          <div className="bg-[#efe6d8] p-6 flex flex-col justify-center overflow-hidden">
+          {/* Right panel — colored tinted field */}
+          <div className="bg-[#efe6d8] p-5 md:p-6 flex flex-col justify-center">
             <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.06)] shadow-[0_2px_16px_rgba(0,0,0,0.06)] overflow-hidden">
               <SchoolListUI />
             </div>
@@ -107,26 +94,17 @@ export default function FeatureShowcase() {
         {/* Use-case cards */}
         <div className="mt-3">
           <p className="text-[11px] text-[#9ca3af] mb-2 font-medium">See what you can do</p>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             {useCases.map((text, i) => (
-              <a
-                key={i}
-                href="#"
-                className="bg-white border border-[#e5e7eb] rounded-xl p-4 hover:border-[#d1d5db] transition-colors group"
-              >
+              <a key={i} href="#" className="bg-white border border-[#e5e7eb] rounded-xl p-4 hover:border-[#d1d5db] transition-colors group">
                 <p className="text-[13px] font-semibold text-[#1a1a1a] leading-snug">
                   {text}{' '}
                   <span className="text-[#9ca3af] group-hover:text-[#2563eb] transition-colors">→</span>
                 </p>
               </a>
             ))}
-            <a
-              href="#"
-              className="bg-[#1a1a1a] rounded-xl p-4 hover:bg-[#2563eb] transition-colors"
-            >
-              <p className="text-[13px] font-semibold text-white leading-snug">
-                Start your application →
-              </p>
+            <a href="#" className="bg-[#1a1a1a] rounded-xl p-4 hover:bg-[#2563eb] transition-colors col-span-2 sm:col-span-1">
+              <p className="text-[13px] font-semibold text-white leading-snug">Start your application →</p>
             </a>
           </div>
         </div>

@@ -94,7 +94,7 @@ function TutorModal({ onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6"
       onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
     >
       <motion.div
@@ -106,7 +106,7 @@ function TutorModal({ onClose }) {
       />
 
       <motion.div
-        className={`relative bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.18)] overflow-hidden w-full ${step === 2 ? 'max-w-3xl' : 'max-w-md'}`}
+        className={`relative bg-white rounded-t-2xl sm:rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.18)] overflow-hidden w-full ${step === 2 ? 'sm:max-w-3xl' : 'sm:max-w-md'}`}
         initial={{ opacity: 0, scale: 0.96, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -122,7 +122,7 @@ function TutorModal({ onClose }) {
           <span className="text-[11px] font-bold text-white">$29 · one-time</span>
         </div>
 
-        <div className="p-8">
+        <div className="p-6 sm:p-8">
           <button
             onClick={onClose}
             className="absolute top-[52px] right-6 text-[#9ca3af] hover:text-[#1a1a1a] transition-colors"
@@ -211,7 +211,7 @@ function TutorModal({ onClose }) {
                 </p>
 
                 {/* All 3 tutors side by side */}
-                <div className="grid grid-cols-3 gap-3 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
                   {tutors.map((tutor, i) => (
                     <div key={tutor.name} className={`border rounded-xl p-5 flex flex-col gap-4 ${i === 0 ? 'border-[#1a1a1a]' : 'border-[#e5e7eb]'}`}>
                       {i === 0 && (
@@ -274,11 +274,11 @@ export default function Pricing() {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <section className="py-24 px-6 bg-[#f9fafb] border-t border-[#e5e7eb]">
+    <section className="py-20 md:py-24 px-6 bg-[#f9fafb] border-t border-[#e5e7eb]">
       <div className="max-w-5xl mx-auto">
 
-        <div className="mb-14">
-          <h2 className="text-[40px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-tight">
+        <div className="mb-12 md:mb-14">
+          <h2 className="text-[32px] md:text-[40px] font-black tracking-[-0.04em] text-[#1a1a1a] leading-tight">
             Simple, honest pricing.
           </h2>
           <p className="mt-3 text-[16px] text-[#6b6b6b] font-normal">
@@ -287,7 +287,7 @@ export default function Pricing() {
         </div>
 
         {/* Three plans side by side */}
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
           {/* Free */}
           <motion.div

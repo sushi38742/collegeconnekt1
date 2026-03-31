@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-[#e5e7eb] py-6 px-6">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+    <footer className="border-t border-[#e5e7eb] py-8 px-6">
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center gap-4 sm:justify-between">
         <span className="text-[13px] font-semibold text-[#1a1a1a]">CollegeConnekt</span>
 
         <div className="flex items-center gap-6">
@@ -16,7 +16,7 @@ export default function Footer() {
           ))}
         </div>
 
-        <p className="text-[12px] text-[#9ca3af]">© 2025 CollegeConnekt. All rights reserved.</p>
+        <p className="text-[12px] text-[#9ca3af]">© 2025 CollegeConnekt.</p>
       </div>
     </footer>
   )

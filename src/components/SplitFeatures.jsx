@@ -85,15 +85,15 @@ const cards = [
 
 export default function SplitFeatures() {
   return (
-    <section className="py-24 px-6">
+    <section className="py-20 md:py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cards.map(({ label, headline, desc, UI, panelBg }, i) => (
             <div key={i} className="border border-[#e5e7eb] rounded-2xl overflow-hidden bg-white flex flex-col">
-              <div className="p-8 pb-5">
+              <div className="p-6 md:p-8 pb-5">
                 <p className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">{label}</p>
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight">
+                  <h3 className="text-[20px] md:text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight">
                     {headline}
                   </h3>
                   <a href="#" className="w-8 h-8 rounded-full bg-[#1a1a1a] flex items-center justify-center flex-shrink-0 hover:bg-[#2563eb] transition-colors mt-0.5">
@@ -104,8 +104,7 @@ export default function SplitFeatures() {
                 </div>
                 <p className="mt-2 text-[13px] text-[#6b6b6b] leading-relaxed font-normal">{desc}</p>
               </div>
-              {/* Colored tinted panel — white card floats inside */}
-              <div className="flex-1 p-6 mx-0" style={{ background: panelBg }}>
+              <div className="flex-1 p-5 md:p-6" style={{ background: panelBg }}>
                 <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.06)] shadow-[0_2px_12px_rgba(0,0,0,0.05)] overflow-hidden">
                   <UI />
                 </div>

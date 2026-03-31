@@ -5,76 +5,61 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 }
 
-function DashboardMockup() {
+function ProductPanel() {
+  const schools = [
+    { name: 'MIT', type: 'Reach', fit: 82, status: 'In progress', deadline: 'Nov 1' },
+    { name: 'U Michigan', type: 'Match', fit: 91, status: 'Essay ready', deadline: 'Feb 1' },
+    { name: 'Northeastern', type: 'Match', fit: 94, status: 'Submitted', deadline: 'Jan 1' },
+    { name: 'Fordham', type: 'Safety', fit: 98, status: 'Not started', deadline: 'Rolling' },
+  ]
+
   return (
-    <div className="bg-white rounded-xl border border-[#e5e7eb] shadow-[0_4px_32px_rgba(0,0,0,0.07)] overflow-hidden w-full max-w-2xl mx-auto text-left">
-      {/* Top bar */}
-      <div className="border-b border-[#e5e7eb] px-5 py-3 flex items-center justify-between">
-        <span className="text-[12px] font-semibold text-[#1a1a1a]">My Applications</span>
-        <span className="text-[11px] text-[#9ca3af]">Fall 2026</span>
+    <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.07)] shadow-[0_2px_24px_rgba(0,0,0,0.07)] overflow-hidden text-left">
+      {/* App topbar */}
+      <div className="px-4 py-2.5 border-b border-[#f0f0f0] flex items-center justify-between bg-[#fafafa]">
+        <span className="text-[11px] font-semibold text-[#1a1a1a]">Fall 2026 Applications</span>
+        <div className="flex items-center gap-2.5">
+          <span className="text-[10px] text-[#9ca3af]">Updated today</span>
+          <div className="w-5 h-5 rounded-full bg-[#e5e7eb] flex items-center justify-center">
+            <span className="text-[8px] font-bold text-[#1a1a1a]">AJ</span>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-3 divide-x divide-[#e5e7eb]">
-        {/* School list */}
-        <div className="col-span-1 p-4">
-          <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">Schools</p>
-          <div className="space-y-3">
-            {[
-              { name: 'MIT', type: 'Reach', score: 82 },
-              { name: 'U Michigan', type: 'Match', score: 91 },
-              { name: 'Northeastern', type: 'Match', score: 94 },
-              { name: 'Fordham', type: 'Safety', score: 98 },
-            ].map((s, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div>
-                  <p className="text-[12px] font-medium text-[#1a1a1a]">{s.name}</p>
-                  <p className="text-[10px] text-[#9ca3af]">{s.type}</p>
-                </div>
-                <span className="text-[12px] font-semibold text-[#1a1a1a]">{s.score}%</span>
-              </div>
+      {/* Table */}
+      <table className="w-full">
+        <thead>
+          <tr className="border-b border-[#f3f4f6]">
+            {['School', 'Type', 'Fit', 'Status', 'Deadline'].map(h => (
+              <th key={h} className="px-4 py-2 text-left text-[10px] font-medium text-[#9ca3af] font-normal">{h}</th>
             ))}
-          </div>
-        </div>
+          </tr>
+        </thead>
+        <tbody>
+          {schools.map((s, i) => (
+            <tr key={i} className={i < schools.length - 1 ? 'border-b border-[#f8f8f8]' : ''}>
+              <td className="px-4 py-2.5 text-[12px] font-semibold text-[#1a1a1a]">{s.name}</td>
+              <td className="px-4 py-2.5 text-[11px] text-[#6b6b6b]">{s.type}</td>
+              <td className="px-4 py-2.5 text-[12px] font-semibold text-[#1a1a1a]">{s.fit}%</td>
+              <td className="px-4 py-2.5 text-[11px] text-[#6b6b6b]">{s.status}</td>
+              <td className="px-4 py-2.5 text-[11px] text-[#9ca3af]">{s.deadline}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-        {/* Action Plan */}
-        <div className="col-span-1 p-4">
-          <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">Action Plan</p>
-          <div className="space-y-2.5">
-            {[
-              { text: 'Request rec from Mr. Chen', done: true, date: '' },
-              { text: 'Finalize activities list', done: false, date: 'Oct 15' },
-              { text: 'Draft MIT supplement', done: false, date: 'Nov 1' },
-              { text: 'Submit Common App', done: false, date: 'Nov 1' },
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-2">
-                <div className={`mt-[2px] w-3 h-3 rounded-sm border flex-shrink-0 flex items-center justify-center ${item.done ? 'bg-[#1a1a1a] border-[#1a1a1a]' : 'border-[#d1d5db]'}`}>
-                  {item.done && (
-                    <svg width="7" height="7" viewBox="0 0 7 7" fill="none">
-                      <path d="M1 3.5l1.5 1.5 3.5-3" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </div>
-                <div className="flex-1 flex items-start justify-between gap-2">
-                  <p className={`text-[11px] leading-tight ${item.done ? 'line-through text-[#9ca3af]' : 'text-[#1a1a1a]'}`}>{item.text}</p>
-                  {item.date && <span className="text-[10px] text-[#9ca3af] whitespace-nowrap flex-shrink-0">{item.date}</span>}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Essay */}
-        <div className="col-span-1 p-4">
-          <p className="text-[10px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">Essay · Draft 2</p>
-          <p className="text-[11px] leading-relaxed text-[#1a1a1a]">
-            Growing up in a household where two languages collided at the dinner table, I learned early that translation is never just about words — it's about{' '}
-            <span className="bg-[#fef9c3]">bridging entire worlds.</span>
-          </p>
-          <div className="mt-3 border-l-2 border-[#e5e7eb] pl-3">
-            <p className="text-[10px] font-medium text-[#6b6b6b] mb-0.5">Suggestion</p>
-            <p className="text-[10px] text-[#6b6b6b] leading-relaxed">Add a specific memory to ground this opener.</p>
-          </div>
-        </div>
+      {/* Summary strip */}
+      <div className="px-4 py-2.5 border-t border-[#f3f4f6] bg-[#fafafa] flex items-center gap-5">
+        {[
+          { dot: 'bg-[#f59e0b]', text: '3 tasks due soon' },
+          { dot: 'bg-[#2563eb]', text: '2 essays in review' },
+          { dot: 'bg-[#10b981]', text: 'Avg fit 91%' },
+        ].map((item, i) => (
+          <span key={i} className="flex items-center gap-1.5 text-[10px] text-[#6b6b6b]">
+            <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${item.dot}`} />
+            {item.text}
+          </span>
+        ))}
       </div>
     </div>
   )
@@ -82,58 +67,91 @@ function DashboardMockup() {
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center pt-14 px-6">
-      <div className="max-w-3xl mx-auto text-center">
-        <motion.h1
-          className="text-[58px] font-black leading-[1.05] tracking-[-0.04em] text-[#1a1a1a]"
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Your college application,<br />handled.
-        </motion.h1>
+    <section className="pt-14 min-h-screen flex items-center">
+      <div className="max-w-6xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center py-16 lg:py-24">
 
-        <motion.p
-          className="mt-5 text-[18px] text-[#6b6b6b] leading-relaxed max-w-xl mx-auto font-normal"
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Fit scores, essay feedback, and a personalized action plan — all in one place. Free to start.
-        </motion.p>
-
+        {/* Left — text content */}
         <motion.div
-          className="mt-8 flex items-center justify-center gap-3"
           initial="hidden"
           animate="visible"
-          variants={fadeUp}
-          transition={{ duration: 0.5, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
         >
-          <a
-            href="#"
-            className="px-5 py-2.5 bg-[#2563eb] text-white text-[14px] font-medium rounded-md hover:bg-[#1d4ed8] transition-colors"
+          {/* Social proof badge */}
+          <motion.div variants={fadeUp} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}>
+            <div className="inline-flex items-center gap-2 mb-6">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} width="12" height="12" viewBox="0 0 12 12" fill="#f59e0b">
+                    <path d="M6 1l1.3 2.6L10 4l-2 1.9.5 2.7L6 7.4l-2.5 1.2.5-2.7L2 4l2.7-.4z"/>
+                  </svg>
+                ))}
+              </div>
+              <span className="text-[12px] text-[#6b6b6b] font-normal">4.9 · 16,000+ students</span>
+            </div>
+          </motion.div>
+
+          <motion.h1
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[38px] sm:text-[46px] lg:text-[54px] font-black leading-[1.05] tracking-[-0.04em] text-[#1a1a1a]"
           >
-            Get started free
-          </a>
-          <a
-            href="#"
-            className="px-5 py-2.5 border border-[#e5e7eb] text-[#1a1a1a] text-[14px] font-medium rounded-md hover:border-[#d1d5db] hover:bg-[#f9fafb] transition-colors"
+            Your college application, handled.
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-5 text-[16px] sm:text-[18px] text-[#6b6b6b] leading-relaxed font-normal max-w-md"
           >
-            See how it works
-          </a>
+            Fit scores, essay feedback, and a personalized action plan — all in one place.
+          </motion.p>
+
+          {/* Email capture */}
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 flex flex-col sm:flex-row gap-2 max-w-md"
+          >
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="flex-1 border border-[#e5e7eb] rounded-lg px-4 py-3 text-[14px] text-[#1a1a1a] placeholder-[#9ca3af] outline-none focus:border-[#1a1a1a] transition-colors"
+            />
+            <button className="px-5 py-3 bg-[#2563eb] text-white text-[14px] font-semibold rounded-lg hover:bg-[#1d4ed8] transition-colors whitespace-nowrap">
+              Get started free
+            </button>
+          </motion.div>
+
+          {/* Trust badges */}
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2"
+          >
+            {['Free to start', 'No credit card required', 'Cancel any time'].map((t, i) => (
+              <span key={i} className="flex items-center gap-1.5 text-[12px] text-[#6b6b6b]">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <circle cx="6" cy="6" r="5.5" stroke="#9ca3af" strokeWidth="1"/>
+                  <path d="M3.5 6l1.5 1.5 3.5-3" stroke="#9ca3af" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {t}
+              </span>
+            ))}
+          </motion.div>
         </motion.div>
 
+        {/* Right — product panel */}
         <motion.div
-          className="mt-14"
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          transition={{ duration: 0.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:block"
         >
-          <DashboardMockup />
+          <div className="bg-[#eaeff8] rounded-2xl p-5 sm:p-7">
+            <ProductPanel />
+          </div>
         </motion.div>
+
       </div>
     </section>
   )
