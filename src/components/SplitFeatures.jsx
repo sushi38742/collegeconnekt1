@@ -1,70 +1,83 @@
 import { motion } from 'framer-motion'
 
-function CollegeProfileUI() {
-  const stats = [
-    { label: 'Accept rate', school: '7%', you: null, match: null },
-    { label: 'GPA', school: '3.87–3.97', you: '3.91', match: true },
-    { label: 'SAT', school: '1490–1570', you: '1520', match: true },
-    { label: 'ACT', school: '33–35', you: '34', match: true },
+function SchoolIntelUI() {
+  const trend = [
+    { year: "'20", rate: 10 },
+    { year: "'21", rate: 9 },
+    { year: "'22", rate: 8 },
+    { year: "'23", rate: 7 },
+    { year: "'24", rate: 7 },
+  ]
+  const maxRate = 14
+  const fitFactors = [
+    { label: 'Academic profile', score: 88, met: true },
+    { label: 'Test scores',      score: 92, met: true },
+    { label: 'Extracurriculars', score: 61, met: false },
+    { label: 'Essays',           score: 74, met: true },
   ]
 
   return (
-    <div className="text-left p-5">
+    <div className="p-5 space-y-4 text-left">
       {/* School header */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between">
         <div>
           <p className="text-[13px] font-bold text-[#1a1a1a]">Northwestern University</p>
-          <p className="text-[11px] text-[#9ca3af] mt-0.5">Evanston, IL · Private · Research University</p>
+          <p className="text-[11px] text-[#9ca3af] mt-0.5">Evanston, IL · Private · Research</p>
         </div>
-        <span className="text-[10px] font-semibold text-[#f59e0b] bg-[#fef9c3] px-2 py-0.5 rounded-full flex-shrink-0">Reach</span>
-      </div>
-
-      {/* Fit score — large visual */}
-      <div className="flex items-center gap-4 mb-4 p-3 bg-[#f8faff] rounded-xl border border-[#e8f0fe]">
-        <div className="relative w-14 h-14 flex-shrink-0">
-          <svg width="56" height="56" viewBox="0 0 56 56">
-            <circle cx="28" cy="28" r="22" fill="none" stroke="#e8f0fe" strokeWidth="5"/>
-            <motion.circle
-              cx="28" cy="28" r="22" fill="none" stroke="#2563eb" strokeWidth="5"
-              strokeLinecap="round"
-              strokeDasharray={`${2 * Math.PI * 22}`}
-              initial={{ strokeDashoffset: 2 * Math.PI * 22 }}
-              animate={{ strokeDashoffset: 2 * Math.PI * 22 * (1 - 0.79) }}
-              transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              style={{ transform: 'rotate(-90deg)', transformOrigin: '28px 28px' }}
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-[14px] font-black text-[#1a1a1a] leading-none">79</span>
-          </div>
-        </div>
-        <div>
-          <p className="text-[12px] font-semibold text-[#1a1a1a]">Fit score</p>
-          <p className="text-[11px] text-[#6b6b6b] leading-snug mt-0.5">You match 3 of 4<br/>key admissions criteria</p>
+        <div className="text-right">
+          <p className="text-[22px] font-black text-[#1a1a1a] leading-none">79</p>
+          <p className="text-[9px] text-[#9ca3af] uppercase tracking-widest mt-0.5">Fit score</p>
         </div>
       </div>
 
-      {/* Stats rows */}
+      {/* Fit factor bars */}
       <div className="space-y-2">
-        {stats.map((s, i) => (
-          <div key={i} className="flex items-center justify-between text-[11px]">
-            <span className="text-[#9ca3af] w-20">{s.label}</span>
-            <span className="text-[#6b6b6b] flex-1 text-center">{s.school}</span>
-            <div className="flex items-center gap-1.5 w-16 justify-end">
-              {s.you ? (
-                <>
-                  <span className="font-semibold text-[#1a1a1a]">{s.you}</span>
-                  {s.match && (
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                      <circle cx="6" cy="6" r="6" fill="#d1fae5"/>
-                      <path d="M3 6l2 2 4-4" stroke="#10b981" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                </>
-              ) : (
-                <span className="text-[#d1d5db]">—</span>
-              )}
+        {fitFactors.map((f, i) => (
+          <div key={i} className="flex items-center gap-2.5">
+            <span className="text-[10px] text-[#6b6b6b] w-32 flex-shrink-0">{f.label}</span>
+            <div className="flex-1 h-1.5 bg-[#e8f0fe] rounded-full overflow-hidden">
+              <motion.div
+                className="h-full rounded-full"
+                style={{ background: f.met ? '#2563eb' : '#fbbf24' }}
+                initial={{ width: 0 }}
+                animate={{ width: `${f.score}%` }}
+                transition={{ delay: 0.2 + i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              />
             </div>
+            <span className="text-[10px] font-semibold text-[#1a1a1a] w-7 text-right flex-shrink-0">{f.score}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Acceptance rate trend */}
+      <div className="border-t border-[#dbeafe] pt-3">
+        <p className="text-[10px] font-semibold text-[#6b6b6b] uppercase tracking-widest mb-2.5">Acceptance rate trend</p>
+        <div className="flex items-end gap-2 h-10">
+          {trend.map((t, i) => (
+            <div key={i} className="flex-1 flex flex-col items-center gap-1">
+              <motion.div
+                className="w-full rounded-sm"
+                style={{ background: i === trend.length - 1 ? '#2563eb' : '#bfdbfe' }}
+                initial={{ height: 0 }}
+                animate={{ height: `${(t.rate / maxRate) * 100}%` }}
+                transition={{ delay: 0.4 + i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              />
+              <span className="text-[8px] text-[#9ca3af]">{t.year}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 gap-2 border-t border-[#dbeafe] pt-3">
+        {[
+          { label: 'Accept', val: '7%' },
+          { label: 'SAT mid', val: '1530' },
+          { label: 'Aid %', val: '64%' },
+        ].map((s, i) => (
+          <div key={i} className="bg-white/60 rounded-lg px-2 py-2 text-center">
+            <p className="text-[13px] font-bold text-[#1a1a1a]">{s.val}</p>
+            <p className="text-[9px] text-[#9ca3af] mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -72,35 +85,69 @@ function CollegeProfileUI() {
   )
 }
 
-function DocumentVaultUI() {
+function AppHubUI() {
   const docs = [
-    { name: 'Common App Essay', tag: 'Essay', color: '#eff6ff', tagColor: '#2563eb', icon: '✍' },
-    { name: 'MIT Supplement', tag: 'Essay', color: '#eff6ff', tagColor: '#2563eb', icon: '✍' },
-    { name: 'Official Transcript', tag: 'Transcript', color: '#f0fdf4', tagColor: '#16a34a', icon: '📄' },
-    { name: 'SAT Score — 1520', tag: 'Test Score', color: '#fefce8', tagColor: '#ca8a04', icon: '📊' },
-    { name: 'Rec — Mr. Chen', tag: 'Rec Letter', color: '#fdf4ff', tagColor: '#9333ea', icon: '✉' },
-    { name: 'Rec — Dr. Patel', tag: 'Rec Letter', color: '#fdf4ff', tagColor: '#9333ea', icon: '✉' },
+    { name: 'Common App Essay', type: 'Essay',     status: 'Final',    progress: 100, color: '#2563eb' },
+    { name: 'MIT Supplement',   type: 'Essay',     status: 'Draft 3',  progress: 72,  color: '#2563eb' },
+    { name: 'Transcript',       type: 'Transcript',status: 'Uploaded', progress: 100, color: '#10b981' },
+    { name: 'SAT — 1520',       type: 'Test Score',status: 'Uploaded', progress: 100, color: '#10b981' },
+    { name: 'Rec — Mr. Chen',   type: 'Rec Letter',status: 'Received', progress: 100, color: '#8b5cf6' },
   ]
 
+  const overallProgress = Math.round(docs.reduce((sum, d) => sum + d.progress, 0) / docs.length)
+
   return (
-    <div className="text-left">
-      <div className="px-4 py-3 border-b border-[#f0f0f0] flex items-center justify-between">
-        <span className="text-[12px] font-semibold text-[#1a1a1a]">Document Vault</span>
-        <button className="flex items-center gap-1 text-[11px] text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors border border-[#e5e7eb] rounded-md px-2 py-1">
-          <span>+</span> Upload
-        </button>
+    <div className="p-5 text-left space-y-3">
+      {/* Progress summary */}
+      <div className="flex items-center justify-between mb-1">
+        <div>
+          <p className="text-[12px] font-bold text-[#1a1a1a]">Application Hub</p>
+          <p className="text-[10px] text-[#9ca3af] mt-0.5">MIT — due Nov 1</p>
+        </div>
+        <div className="text-right">
+          <p className="text-[22px] font-black text-[#1a1a1a] leading-none">{overallProgress}%</p>
+          <p className="text-[9px] text-[#9ca3af] uppercase tracking-widest">Ready</p>
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-2 p-3">
+
+      {/* Overall bar */}
+      <div className="h-1.5 bg-[#f3e8c8] rounded-full overflow-hidden">
+        <motion.div
+          className="h-full bg-[#d97706] rounded-full"
+          initial={{ width: 0 }}
+          animate={{ width: `${overallProgress}%` }}
+          transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+
+      {/* Doc rows */}
+      <div className="space-y-1.5 pt-1">
         {docs.map((doc, i) => (
-          <div key={i} className="rounded-lg p-2.5 border border-[#f0f0f0] hover:border-[#d1d5db] transition-colors cursor-pointer" style={{ background: doc.color }}>
-            <div className="flex items-start justify-between gap-1 mb-1.5">
-              <span className="text-[14px] leading-none">{doc.icon}</span>
-              <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full bg-white border border-[#e5e7eb]" style={{ color: doc.tagColor }}>
-                {doc.tag}
-              </span>
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 + i * 0.08, duration: 0.3 }}
+            className="flex items-center gap-2.5 bg-white/50 rounded-lg px-2.5 py-2"
+          >
+            <div
+              className="w-1 h-6 rounded-full flex-shrink-0"
+              style={{ background: doc.color }}
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-[11px] font-semibold text-[#1a1a1a] truncate">{doc.name}</p>
+              <p className="text-[9px] text-[#9ca3af]">{doc.type}</p>
             </div>
-            <p className="text-[11px] font-medium text-[#1a1a1a] leading-snug line-clamp-2">{doc.name}</p>
-          </div>
+            <span
+              className="text-[9px] font-semibold px-2 py-0.5 rounded-full flex-shrink-0"
+              style={{
+                background: doc.progress === 100 ? '#d1fae5' : '#fef3c7',
+                color: doc.progress === 100 ? '#065f46' : '#92400e',
+              }}
+            >
+              {doc.status}
+            </span>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -109,18 +156,20 @@ function DocumentVaultUI() {
 
 const cards = [
   {
-    label: 'School Research',
+    label:    'School Research',
     headline: 'Deep dive on any college.',
-    desc: 'Real CDS data, acceptance rates, and a fit score — all pulled automatically when you add a school to your list.',
-    UI: CollegeProfileUI,
-    panelBg: '#d8e8fb',
+    desc:     'Real CDS data, acceptance trends, fit factor breakdowns, and financial aid rates — all pulled automatically when you add a school.',
+    UI:       SchoolIntelUI,
+    panelBg:  '#d8e8fb',
+    href:     '#',
   },
   {
-    label: 'Document Vault',
-    headline: 'One place for everything.',
-    desc: 'Essays, transcripts, test scores, and rec letters — organized by school and always one click away.',
-    UI: DocumentVaultUI,
-    panelBg: '#d8e9e1',
+    label:    'Application Hub',
+    headline: 'Every piece, in one place.',
+    desc:     'Track essay drafts, uploaded documents, rec letters, and test scores against each school deadline — one view for your whole application.',
+    UI:       AppHubUI,
+    panelBg:  '#efe6d8',
+    href:     '#',
   },
 ]
 
@@ -129,21 +178,23 @@ export default function SplitFeatures() {
     <section className="py-20 md:py-24 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {cards.map(({ label, headline, desc, UI, panelBg }, i) => (
+          {cards.map(({ label, headline, desc, UI, panelBg, href }, i) => (
             <div key={i} className="border border-[#e5e7eb] rounded-2xl overflow-hidden bg-white flex flex-col">
               <div className="p-6 md:p-8 pb-5">
                 <p className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-3">{label}</p>
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-[20px] md:text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight">
-                    {headline}
-                  </h3>
-                  <a href="#" className="w-8 h-8 rounded-full bg-[#1a1a1a] flex items-center justify-center flex-shrink-0 hover:bg-[#2563eb] transition-colors mt-0.5">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M3 7h8M8 4l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </a>
-                </div>
-                <p className="mt-2 text-[13px] text-[#6b6b6b] leading-relaxed font-normal">{desc}</p>
+                <h3 className="text-[20px] md:text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] leading-tight mb-2">
+                  {headline}
+                </h3>
+                <p className="text-[13px] text-[#6b6b6b] leading-relaxed font-normal mb-4">{desc}</p>
+                <a
+                  href={href}
+                  className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563eb] hover:text-[#1d4ed8] transition-colors"
+                >
+                  Learn more
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </a>
               </div>
               <div className="flex-1 p-5 md:p-6" style={{ background: panelBg }}>
                 <div className="bg-white rounded-xl border border-[rgba(0,0,0,0.06)] shadow-[0_2px_12px_rgba(0,0,0,0.05)] overflow-hidden">
