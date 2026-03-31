@@ -1,29 +1,32 @@
 import { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
 
 export default function Signup() {
   const { state } = useLocation()
+  const navigate = useNavigate()
   const [email, setEmail] = useState(state?.email ?? '')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [done, setDone] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
     setLoading(true)
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/onboarding/1` },
-      })
-      if (error) setError(`${error.message} [${import.meta.env.VITE_SUPABASE_URL ?? 'NO URL'}]`)
-      else setDone(true)
+      const { data, error } = await supabase.auth.signUp({ email, password })
+      if (error) {
+        setError(error.message)
+      } else if (data.session) {
+        // Email confirmation disabled — signed in immediately
+        navigate('/onboarding/1')
+      } else {
+        // Email confirmation enabled — show message
+        setError('Check your email for a confirmation link.')
+      }
     } catch (err) {
-      setError(`Network error: ${err.message} — URL: ${import.meta.env.VITE_SUPABASE_URL}`)
+      setError(`Network error: ${err.message}`)
     }
     setLoading(false)
   }
@@ -33,24 +36,6 @@ export default function Signup() {
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/onboarding/1` },
     })
-  }
-
-  if (done) {
-    return (
-      <div className="min-h-screen bg-[#f9fafb] flex items-center justify-center px-4">
-        <div className="w-full max-w-sm text-center">
-          <div className="w-12 h-12 rounded-full bg-[#d1fae5] flex items-center justify-center mx-auto mb-4">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M4 10l4 4 8-8" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <h2 className="text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] mb-2">Check your email</h2>
-          <p className="text-[13px] text-[#6b6b6b] leading-relaxed">
-            We sent a confirmation link to <strong>{email}</strong>. Click it to activate your account and get started.
-          </p>
-        </div>
-      </div>
-    )
   }
 
   return (
