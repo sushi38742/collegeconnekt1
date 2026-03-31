@@ -5,6 +5,7 @@ import SocialProof from './components/SocialProof'
 import Features from './components/Features'
 import FeatureShowcase from './components/FeatureShowcase'
 import SplitFeatures from './components/SplitFeatures'
+import FitPreview from './components/FitPreview'
 import Testimonials from './components/Testimonials'
 import Resources from './components/Resources'
 import Pricing from './components/Pricing'
@@ -19,6 +20,7 @@ export default function App() {
       <Features />
       <FeatureShowcase />
       <SplitFeatures />
+      <FitPreview />
       <Testimonials />
       <Resources />
       <Pricing />
