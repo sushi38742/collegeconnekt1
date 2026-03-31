@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
-import { supabase } from '../../lib/supabase'
+import { useState, useRef } from 'react'
 
-function SchoolChip({ school, onRemove }) {
+function SchoolChip({ name, onRemove }) {
   return (
     <div className="inline-flex items-center gap-1.5 bg-[#f3f4f6] rounded-full pl-3 pr-2 py-1.5">
-      <span className="text-[12px] font-medium text-[#1a1a1a]">{school.name}</span>
+      <span className="text-[12px] font-medium text-[#1a1a1a]">{name}</span>
       <button
         type="button"
         onClick={onRemove}
@@ -19,142 +18,71 @@ function SchoolChip({ school, onRemove }) {
 }
 
 export default function Step3({ onSubmit, saving }) {
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [selected, setSelected] = useState([])
-  const [searching, setSearching] = useState(false)
-  const [showDropdown, setShowDropdown] = useState(false)
-  const debounceRef = useRef(null)
+  const [input, setInput] = useState('')
+  const [schools, setSchools] = useState([])
+  const inputRef = useRef(null)
 
-  useEffect(() => {
-    if (!query.trim()) { setResults([]); setShowDropdown(false); return }
-    clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(async () => {
-      setSearching(true)
-      const { data } = await supabase
-        .from('schools')
-        .select('id, name, state, type')
-        .ilike('name', `%${query}%`)
-        .limit(8)
-      setResults(data ?? [])
-      setShowDropdown(true)
-      setSearching(false)
-    }, 250)
-    return () => clearTimeout(debounceRef.current)
-  }, [query])
-
-  async function addSchool(school) {
-    if (selected.find(s => s.id === school.id)) return
-    if (selected.length >= 15) return
-    setSelected(prev => [...prev, school])
-    setQuery('')
-    setResults([])
-    setShowDropdown(false)
-  }
-
-  async function addCustomSchool() {
-    const name = query.trim()
+  function addSchool() {
+    const name = input.trim()
     if (!name) return
-    // Check if already selected by name
-    if (selected.find(s => s.name.toLowerCase() === name.toLowerCase())) {
-      setQuery(''); setShowDropdown(false); return
-    }
-    // Insert into schools table and get the new id
-    const { data, error } = await supabase
-      .from('schools')
-      .insert({ name })
-      .select('id, name, state, type')
-      .single()
-    if (!error && data) {
-      addSchool(data)
-    } else {
-      // If insert failed (e.g. already exists with different case), try selecting it
-      const { data: existing } = await supabase
-        .from('schools')
-        .select('id, name, state, type')
-        .ilike('name', name)
-        .single()
-      if (existing) addSchool(existing)
-    }
+    if (schools.includes(name)) { setInput(''); return }
+    setSchools(prev => [...prev, name])
+    setInput('')
   }
 
   function handleKeyDown(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      if (results.length > 0) {
-        addSchool(results[0])
-      } else if (query.trim()) {
-        addCustomSchool()
-      }
+    if (e.key === 'Enter') { e.preventDefault(); addSchool() }
+    if (e.key === 'Backspace' && !input && schools.length > 0) {
+      setSchools(prev => prev.slice(0, -1))
     }
   }
 
   function handleSubmit(e) {
     e.preventDefault()
-    onSubmit(selected.map(s => s.id))
+    onSubmit(schools)
   }
 
   return (
     <div className="bg-white border border-[#e5e7eb] rounded-2xl p-8">
       <h2 className="text-[22px] font-black tracking-[-0.03em] text-[#1a1a1a] mb-1">Build your school list.</h2>
       <p className="text-[13px] text-[#6b6b6b] mb-7">
-        Add at least one school. We'll generate fit scores for each when you finish.
+        Type a school name and press <kbd className="bg-[#f3f4f6] px-1.5 py-0.5 rounded text-[11px]">Enter</kbd> to add it. Add as many as you want.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="relative">
-          <label className="block text-[11px] font-semibold text-[#1a1a1a] uppercase tracking-widest mb-1.5">Search schools</label>
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onFocus={() => (results.length > 0 || query.trim()) && setShowDropdown(true)}
-            onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
-            className="w-full border border-[#e5e7eb] rounded-lg px-3.5 py-2.5 text-[13px] text-[#1a1a1a] placeholder-[#9ca3af] outline-none focus:border-[#1a1a1a] transition-colors"
-            placeholder="e.g. MIT, UCLA, Michigan…"
-          />
-
-          {showDropdown && query.trim() && (
-            <div className="absolute top-full left-0 right-0 z-20 mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)] overflow-hidden">
-              {results.map(school => (
-                <button
-                  key={school.id}
-                  type="button"
-                  onMouseDown={() => addSchool(school)}
-                  className="w-full flex items-center justify-between px-4 py-3 hover:bg-[#f9fafb] transition-colors text-left border-b border-[#f3f4f6] last:border-0"
-                >
-                  <span className="text-[13px] font-medium text-[#1a1a1a]">{school.name}</span>
-                  <span className="text-[11px] text-[#9ca3af]">{school.state}{school.type ? ` · ${school.type}` : ''}</span>
-                </button>
-              ))}
-              {/* Always show "Add [query]" option */}
-              <button
-                type="button"
-                onMouseDown={addCustomSchool}
-                className="w-full flex items-center gap-2 px-4 py-3 hover:bg-[#f0f9ff] transition-colors text-left border-t border-[#f3f4f6]"
-              >
-                <span className="text-[11px] font-semibold text-[#2563eb] bg-[#dbeafe] px-2 py-0.5 rounded-full">+ Add</span>
-                <span className="text-[13px] font-medium text-[#1a1a1a]">{query.trim()}</span>
-              </button>
-            </div>
-          )}
-
-          {searching && (
-            <div className="absolute right-3 top-9 w-4 h-4 border border-[#e5e7eb] border-t-[#1a1a1a] rounded-full animate-spin" />
-          )}
+        <div>
+          <label className="block text-[11px] font-semibold text-[#1a1a1a] uppercase tracking-widest mb-1.5">Add schools</label>
+          <div className="flex gap-2">
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="flex-1 border border-[#e5e7eb] rounded-lg px-3.5 py-2.5 text-[13px] text-[#1a1a1a] placeholder-[#9ca3af] outline-none focus:border-[#1a1a1a] transition-colors"
+              placeholder="e.g. MIT, UCLA, Michigan…"
+            />
+            <button
+              type="button"
+              onClick={addSchool}
+              disabled={!input.trim()}
+              className="px-4 py-2.5 bg-[#f3f4f6] text-[13px] font-semibold text-[#1a1a1a] rounded-lg hover:bg-[#e5e7eb] transition-colors disabled:opacity-40"
+            >
+              Add
+            </button>
+          </div>
         </div>
 
-        {selected.length > 0 && (
+        {schools.length > 0 && (
           <div>
             <p className="text-[11px] font-semibold text-[#9ca3af] uppercase tracking-widest mb-2">
-              Your list · {selected.length} school{selected.length !== 1 ? 's' : ''}
+              Your list · {schools.length} school{schools.length !== 1 ? 's' : ''}
             </p>
             <div className="flex flex-wrap gap-2">
-              {selected.map(s => (
+              {schools.map(name => (
                 <SchoolChip
-                  key={s.id}
-                  school={s}
-                  onRemove={() => setSelected(prev => prev.filter(x => x.id !== s.id))}
+                  key={name}
+                  name={name}
+                  onRemove={() => setSchools(prev => prev.filter(s => s !== name))}
                 />
               ))}
             </div>
@@ -166,11 +94,8 @@ export default function Step3({ onSubmit, saving }) {
           disabled={saving}
           className="w-full mt-2 py-3 bg-[#1a1a1a] text-white text-[13px] font-semibold rounded-lg hover:bg-[#2563eb] transition-colors disabled:opacity-50"
         >
-          {saving ? 'Setting up your account…' : selected.length > 0 ? `Finish setup · ${selected.length} school${selected.length !== 1 ? 's' : ''}` : 'Skip for now'}
+          {saving ? 'Setting up your account…' : schools.length > 0 ? `Finish setup · ${schools.length} school${schools.length !== 1 ? 's' : ''}` : 'Skip for now'}
         </button>
-        {selected.length > 0 && (
-          <p className="text-center text-[11px] text-[#9ca3af]">We'll generate fit scores for all your schools instantly.</p>
-        )}
       </form>
     </div>
   )

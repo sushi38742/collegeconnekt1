@@ -77,21 +77,38 @@ export default function Onboarding({ step }) {
     setSaving(false)
   }
 
-  async function saveStep3(schoolIds) {
+  async function saveStep3(schoolNames) {
     setSaving(true)
     setError('')
 
-    // Save schools (optional)
+    // Upsert each school by name, get back IDs
+    const schoolIds = []
+    for (const name of schoolNames) {
+      // Try to find existing school first
+      const { data: existing } = await supabase
+        .from('schools').select('id').ilike('name', name).single()
+      if (existing) {
+        schoolIds.push(existing.id)
+      } else {
+        const { data: created } = await supabase
+          .from('schools').insert({ name }).select('id').single()
+        if (created) schoolIds.push(created.id)
+      }
+    }
+
+    // Save to saved_schools
     if (schoolIds.length > 0) {
-      const rows = schoolIds.map(id => ({ user_id: session.user.id, school_id: id }))
-      const { error: schoolError } = await supabase.from('saved_schools').insert(rows)
-      if (schoolError) { setError(schoolError.message); setSaving(false); return }
+      await supabase.from('saved_schools').insert(
+        schoolIds.map(id => ({ user_id: session.user.id, school_id: id }))
+      )
     }
 
     // Complete onboarding
-    await supabase.from('profiles').update({ onboarding_step: null }).eq('id', session.user.id)
+    const { error: profileError } = await supabase
+      .from('profiles').update({ onboarding_step: null }).eq('id', session.user.id)
+    if (profileError) { setError(profileError.message); setSaving(false); return }
 
-    // Fire edge functions in parallel (fire-and-forget, don't block nav)
+    // Fire edge functions (fire-and-forget)
     schoolIds.forEach(schoolId => {
       supabase.functions.invoke('generate-fit-score', { body: { user_id: session.user.id, school_id: schoolId } })
     })
